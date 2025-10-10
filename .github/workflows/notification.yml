@@ -31,6 +31,23 @@ jobs:
           webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
           color: "#faed90"
           args: |
-            "New commit in ${{ github.repository }} by @${{ github.actor }}. \n
-            Commit: ${{ env.Commit_Message }} \n
-            URL: ${{ github.repositoryUrl }}"
+            {
+              "description": "A new commit has been pushed to **${{ github.repository }}** by **@${{ github.actor }}**.",
+              "color": 3447003,
+              "fields": [
+                {
+                  "name": "Commit Message",
+                  "value": "${{ env.Commit_Message }}",
+                  "inline": false
+                },
+                {
+                  "name": "Link",
+                  "value": "[**View Repository**](${{ github.repositoryUrl }})", // ハイパーリンク化
+                  "inline": true
+                }
+              ]
+            }
+
+#            "New commit in ${{ github.repository }} by @${{ github.actor }}.
+#            Commit: ${{ env.Commit_Message }}
+#            URL: ${{ github.repositoryUrl }}"
