@@ -31,23 +31,6 @@ jobs:
           webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
           color: "#faed90"
           args: |
-            {
-              "description": "A new commit has been pushed to **${{ github.repository }}** by **@${{ github.actor }}**.",
-              "color": 3447003,
-              "fields": [
-                {
-                  "name": "Commit Message",
-                  "value": "${{ env.Commit_Message }}",
-                  "inline": false
-                },
-                {
-                  "name": "Link",
-                  "value": "[**View Repository**](${{ github.repositoryUrl }})", // ハイパーリンク化
-                  "inline": true
-                }
-              ]
-            }
-
-#            "New commit in ${{ github.repository }} by @${{ github.actor }}.
-#            Commit: ${{ env.Commit_Message }}
-#            URL: ${{ github.repositoryUrl }}"
+            "New commit in ${{ github.repository }} by @${{ github.actor }}.
+            Commit: ${{ env.Commit_Message }}
+            URL: https://github.com/3k11ooo/TIL"
