@@ -31,7 +31,7 @@ jobs:
         id: staging
         run: |
           git add .
-          echo "NUM_OF_STAGED=${git diff --staged --name-only | wc -l}" >> $GITHUB_OUTPUT
+          echo "NUM_OF_STAGED=$(git diff --staged --name-only | wc -l)" >> $GITHUB_OUTPUT
 
       # 変更がある場合のみコミット
       - name: Commit wiki pages

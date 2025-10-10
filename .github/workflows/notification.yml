@@ -1,0 +1,13 @@
+on:
+  push:
+    paths:
+      - ./**/*.md
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  add-markdown-notification:
+    runs-on: ubuntu-latest
+    steps:
