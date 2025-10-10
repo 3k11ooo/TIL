@@ -22,7 +22,7 @@ jobs:
 
       - name: Get commit message
         run: |
-          echo "Commit_Message=$(git log --pretty=oneline --all --abbrev-commit)" >> $GITHUB_ENV
+          echo "Commit_Message=$(git log --pretty=format:%s --all --abbrev-commit)" >> $GITHUB_ENV
 
       - name: Send message
         uses: appleboy/discord-action@v1.2.0
@@ -30,4 +30,7 @@ jobs:
           webhook_id: ${{ secrets.WEBHOOK_ID }}
           webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
           color: "#faed90"
-          args: "${{ github.event_name }} by @${{ github.actor }} \nmessage: ${{ env.Commit_Message }}"
+          args: |
+            "New commit in ${{ github.repository }} by @${{ github.actor }}. \n
+            Commit: ${{ env.Commit_Message }} \n
+            URL: ${{ github.repositoryUrl }}"
