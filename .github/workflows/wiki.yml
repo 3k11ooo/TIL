@@ -12,18 +12,21 @@ jobs:
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      # Wikiリポジトリをクローン
-      - name: Clone Wiki repository
-        run: |
-          git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.wiki.git wiki
+      # Wikiリポジトリをチェックアウト
+      - name: Checkout Wiki repository
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ github.repository }}.wiki
+          path: wiki
+          token: ${{ secrets.WIKI_PAT }}
+          fetch-depth: 0 # 履歴を全て取得
 
       # Wikiリポジトリを更新
       - name: Update Wiki repository
         run: |
-          rm -r wiki/*
-          find . -name "*.md" -not -path "./wiki/*" -not -name "README.md" -exec cp --parents {} wiki/ \;
+          rm -f wiki/*.md
+          find . -name "*.md" -not -name "README.md" -not -name "Home.md" -exec cp {} wiki/ \;
 
       # 差分をコミット
       - name: Stage and count changes
@@ -34,11 +37,11 @@ jobs:
           echo "NUM_OF_STAGED=$(git diff --staged --name-only | wc -l)" >> $GITHUB_OUTPUT
 
       # 変更がある場合のみコミット
-      - name: Commit wiki pages
+      - name: Commit and Push wiki pages
         working-directory: wiki
         if: steps.staging.outputs.NUM_OF_STAGED > 0
         run: |
           git config user.email "action@github.com"
           git config user.name "GitHub Actions"
-          git commit -m "${GITHUB_WORKFLOW}"
+          git commit -m "${{ github.workflow }}"
           git push
