@@ -18,13 +18,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
-          fetch-depth: 1
+          ref: ${{ github.head_ref }}
 
-      - name: send message
+      - name: Get commit message
+        run: |
+          echo "Commit_Message=$(git log --pretty=oneline --all --abbrev-commit)" >> $GITHUB_ENV
+
+      - name: Send message
         uses: appleboy/discord-action@v1.2.0
         with:
           webhook_id: ${{ secrets.WEBHOOK_ID }}
           webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
-          color: "#48f442"
-          username: "GitHub Bot"
-          message: "A new commit has been pushed with custom color."
+          color: "#faed90"
+          args: "${{ github.event_name }} by @${{ github.actor }} \nmessage: ${{ env.Commit_Message }}"
