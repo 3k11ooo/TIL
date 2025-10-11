@@ -2,9 +2,9 @@ name: Notification
 on:
   push:
     branches:
-      - main
+      - "main"
     paths:
-      - /**/*.md
+      - "**.md"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

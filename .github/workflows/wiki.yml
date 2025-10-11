@@ -2,7 +2,7 @@ name: Upload Wiki
 on:
   push:
     paths:
-      - ./**/*.md
+      - "**.md"
   workflow_dispatch:
 
 jobs:
