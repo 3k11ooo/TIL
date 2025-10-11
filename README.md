@@ -6,6 +6,10 @@
 
 ```text
 til/
+├── .github/
+│   └── workflow/
+│       ├── notification.yml # Discordへ通知するjob
+│       └── wiki.yml # Wikiを更新するjob
 ├── programming/
 │   └── java.md
 ├── devops/
