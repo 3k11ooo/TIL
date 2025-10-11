@@ -17,3 +17,12 @@
           - 5432:5432
     ```
   
+## ワークフローの重複実行を制御する
+
+- 同じワークフローが起動していたら古い方をキャンセルしてくれるらしい
+
+    ```
+     concurrency:
+       group: ${{ github.workflow }}-${{ github.ref }}
+       cancel-in-progress: true
+    ```
