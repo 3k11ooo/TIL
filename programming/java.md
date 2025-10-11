@@ -31,6 +31,24 @@ $ mvn versions:display-dependency-updates
 
 ## SpringBoot
 
+### Exception
+
+- DBでユニークキー制約の例外時にSQL文がスタックトレースに含まれる問題
+
+    ```
+    org.springframework.dao.DataIntegrityViolationException: JDBC exception executing SQL [insert into t1 as tid1_0(c1, c2) value (?, ?)] [ERROR: duplicate key value violates unique constraint "uq__t1__1"
+    詳細: Key (c2)=(alice) already exists.] [n/a]; SQL [n/a]; constraint [uq__t1__1]
+    ```
+  
+  - `org.hibernate.exception.ConstraintViolationException`のエラーメッセージ内に含まれているらしい
+  - ユニークキーの例外は`org.postgresql.util.PSQLException`が出力している
+    - その例外を元に発行したSQLをエラーメッセージに乗せてしまっているらしい
+  - ログにSQL文が流れてしまうと個人情報的に問題があるので `DataIntegrityViolationException`の時はログにスタックトレースを出力しないようにする
+    - ただし、親クラスの`org.springframework.dao.DataAccessException`に含まれる別の例外クラスでも同様の挙動になる可能性があるため今後調査
+  - 参考
+    - [DataIntegrityViolationException](https://spring.pleiades.io/spring-framework/docs/current/javadoc-api/org/springframework/dao/DataIntegrityViolationException.html)
+    - [ConstraintViolationException](https://docs.jboss.org/hibernate/orm/6.6/javadocs/org/hibernate/exception/ConstraintViolationException.html)
+
 ### Annotation 
 
 - @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
